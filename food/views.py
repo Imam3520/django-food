@@ -89,6 +89,57 @@ def detail(request, item_id):
     # return HttpResponse("This is detail view: %s" % item_id)
     return render(request,'food/detail.html', context)
 
+
+
+# # ------------------------------------------------------------
+# # Function-based view to display detailed information 
+# # about a specific item along with related history, 
+# # orders, and feedback.
+# # ------------------------------------------------------------
+# def detail(request, item_id):
+#     """
+#     This view fetches and displays:
+#     - Item details
+#     - Product history
+#     - Customer orders (filtered based on user role)
+#     - Customer ratings & feedback
+#     """
+
+#     # Fetch the item from the database, or return a 404 if not found
+#     # Using get_object_or_404 prevents the app from breaking on invalid IDs
+#     item = get_object_or_404(Item, pk=item_id)
+
+#     # Fetch product history related to this item's product code
+#     hist = History.objects.filter(prod_ref=item.prod_code)
+
+#     # Determine which orders to fetch based on the logged-in user's role
+#     if request.user.profile.user_type in ['Restaurant', 'Admin']:
+#         # Restaurant/Admin can view ALL orders for this product
+#         Obj_CusOrd = CusOrders.objects.filter(prod_code=item.prod_code)
+#     elif request.user.profile.user_type == 'Customer':
+#         # Customers can only view THEIR OWN orders for this product
+#         Obj_CusOrd = CusOrders.objects.filter(
+#             prod_code=item.prod_code,
+#             user=request.user.username
+#         )
+#     else:
+#         # If user type doesn't match any known role, return an empty queryset
+#         Obj_CusOrd = CusOrders.objects.none()
+
+#     # Fetch all customer ratings & feedback for this product
+#     crf = CusRatingFeedback.objects.filter(prod_code=item.prod_code)
+
+#     # Prepare data to send to the template
+#     context = {
+#         'item': item,        # Item details
+#         'hist': hist,        # Product history
+#         'crf': crf,          # Ratings & feedback
+#         'oco': Obj_CusOrd,   # Customer orders (filtered)
+#     }
+
+#     # Render the detail template with the given context
+#     return render(request, 'food/detail.html', context)
+
 # class based detail view
 # ------------------------------------------------------------
 class FoodDetail(DetailView):
