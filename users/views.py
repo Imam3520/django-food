@@ -5,6 +5,7 @@ from users.forms import RegistrationForm, CusRatFeedform, CusOrdersUpd
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from .models import CusOrders, CusRatingFeedback
@@ -26,15 +27,23 @@ def register(request):
 def login_view(request):
     username = request.POST["username"]
     password = request.POST["password"]
+
+    # Check if username exists in database
+    try:
+        user_exists = User.objects.get(username=username)
+    except User.DoesNotExist:
+        user_exists = None
+
     user = authenticate(request, username=username, password=password)
 
     # if else block to check user is superuser or authenticated or invalid user
 
-    if user is None:
-        messages.success(
-        request,
-        'Invalid login try again'
-        )
+    if user_exists is None:
+        messages.error(request, 'Username is incorrect. Please check your username.')
+        return redirect('login')
+    
+    elif user is None and user_exists:
+        messages.error(request, 'Password is incorrect. Please check your password.')
         return redirect('login')
 
     elif user.is_superuser:
