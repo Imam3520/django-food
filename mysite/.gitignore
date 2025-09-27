@@ -10,3 +10,7 @@ db.sqlite3
 .env
 *.venv/
 venv/
+
+# Ignore parent db.sqlite3 and caches
+../db.sqlite3
+../*/__pycache__/
