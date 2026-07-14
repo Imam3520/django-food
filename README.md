@@ -45,7 +45,7 @@ mysite/
 ⚙️ Installation
 
 Clone the repository
-  git clone https://github.com/Imam3520/django-food.git
+  git clone https://github.com/Imam3000/django-food.git
   cd django-food
 
 Create a virtual environment
